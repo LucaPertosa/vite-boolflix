@@ -4,11 +4,13 @@ import AppCardList from "./components/AppCardList.vue";
 import { store } from "./store";
 import { typo } from "./typo";
 import axios from "axios";
+import LangFlag from "vue-lang-code-flags";
 
 export default {
     components: {
         AppHeader,
-        AppCardList
+        AppCardList,
+        LangFlag
     },
     data() {
         return {
@@ -45,6 +47,7 @@ export default {
                         }
                     }).then((resp) => {
                         this.store.tvShows = resp.data.results
+                        console.log(resp.data);
                     }).catch(() => {
                         alert('Inserire un valore valido');
                     }).finally(() => {
@@ -65,12 +68,12 @@ export default {
         <div v-if="store.isLoading">Loading...</div>
         <AppCardList v-else/>
     </div>
-    <!-- <ul>
+    <ul>
         <li><h2>film</h2></li>
         <li v-for="result in store.movies" :key="result.id">
             titolo:{{ result.title }},
             titolo originale:{{ result.original_title }}, 
-            lingua: {{ result.original_language }}, 
+            <lang-flag :iso="result.original_language" :squared="false"/>, 
             voto: {{ result.vote_average }}
         </li>
     </ul>
@@ -79,10 +82,10 @@ export default {
         <li v-for="result in store.tvShows" :key="result.id">
             titolo:{{ result.name }},
             titolo originale:{{ result.original_name }},
-            lingua: {{ result.original_language }},
+            <lang-flag :iso="result.original_language" :squared="false"/>,
             voto: {{ result.vote_average }}
         </li>
-    </ul> -->
+    </ul>
 </template>
 
 <style lang="scss">

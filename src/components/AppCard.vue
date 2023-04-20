@@ -1,5 +1,4 @@
 <script>
-import { reactive } from 'vue';
 import { store } from '../store';
 import { typo } from '../typo'
 export default {
@@ -7,18 +6,24 @@ export default {
     props: {
         result: Object
     },
+    emits: ['click'],
     data(){
         return {
             store,
             typo
         }
     },
+    methods: {
+        onClick() {
+            this.$emit('click', this.result);
+        }
+    }
 };
 </script>
 
 <template>
     <!-- Card Movies -->
-    <div class="card" v-if="this.typo.isMovie">
+    <div class="card" v-if="this.typo.isMovie" @click="onClick">
         <img v-if="result.poster_path" :src="store.imgPath + result.poster_path" class="card-img-top" alt="...">
         <img v-else class="card-img-top notF" src="../assets/notF.png">
         <div class="card-body">
@@ -27,7 +32,7 @@ export default {
     </div>
     <!-- /Card Movies -->
     <!-- Card Serie TV -->
-    <div class="card" v-if="this.typo.isTv">
+    <div class="card" v-if="this.typo.isTv" @click="onClick">
         <img v-if="result.poster_path" :src="store.imgPath + result.poster_path" class="card-img-top" alt="...">
         <img v-else class="card-img-top notF" src="../assets/notF.png">
         <div class="card-body">

@@ -2,16 +2,32 @@
 import { store } from '../store';
 import { typo } from '../typo';
 import AppCard from './AppCard.vue';
+import CardPreview from './CardPreview.vue';
 export default {
     name: "AppCardList",
     components: {
         AppCard,
+        CardPreview
     },
     data(){
         return {
             store,
-            typo
+            typo,
+            show: false,
+            currentPreview: null,
         }
+    },
+    methods: {
+        showPreview(item) {
+            this.show = true;
+            this.currentPreview = item;
+            document.body.style.overflow = 'hidden';
+        },
+        hidePreview() {
+            this.show = false;
+            this.currentPreview = null;
+            document.body.style.overflow = 'auto';
+        },
     }
 }
 </script>
@@ -25,13 +41,17 @@ export default {
             <div class="col-12 mx-3" v-if="this.typo.isTv">
                 <h2 class="">Serie Tv</h2>
             </div>
-            <AppCard v-if="this.typo.isMovie" v-for="elem in store.movies" :key="elem.id" :result="elem"/>
-            <AppCard v-if="this.typo.isTv" v-for="elem in store.tvShows" :key="elem.id" :result="elem"/>
+            <AppCard v-if="typo.isMovie" v-for="(elem, index) in store.movies" :key="index" :result="elem" @click="showPreview" />
+            <AppCard v-if="typo.isTv" v-for="(elem, index) in store.tvShows" :key="index" :result="elem" @click="showPreview"/>
+            <div v-if="show" class="preview" @click="hidePreview">
+                    <CardPreview v-if="typo.isTv" :result="currentPreview" @click="showPreview" />
+                    <CardPreview v-if="typo.isMovie" :result="currentPreview" @click="showPreview" />
+            </div>
         </div>
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "../style/partials/variables" as *;
 
     .content {
@@ -39,6 +59,7 @@ export default {
         padding: 30px;
         background-color: grey;
         overflow-y: auto;
+        position: relative;
         
         .wrapper {
             display: flex;
@@ -67,6 +88,25 @@ export default {
                     }
                 }
             }
+        }
+        .preview {
+            position: fixed;
+            top: calc($AppHeader-h + 10%);
+            left: 10%;
+            width: 80%;
+            height: calc(80% - $AppHeader-h);
+            background-color: rgba(0, 0, 0, 1);
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 0 0 1000px rgba($color: grey, $alpha: .7);
+        }
+        .fade-in {
+            opacity: 0;
+            transition: opacity .5s ease-in-out;
+        }
+
+        .fade-in.active {
+            opacity: 1;
         }
     }
 </style>
