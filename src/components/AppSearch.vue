@@ -35,7 +35,12 @@ export default {
 </script>
 
 <template>
-    <input type="text" @keyup.enter="searchContent" v-model="userInSearch">
+    <div>
+        <div class="input-group" >
+            <input v-model.trim="userInSearch" @keyup.enter="searchContent" type="text" class="form-control" placeholder="Scrivi qui il titolo" aria-label="Scrivi qui il titolo" aria-describedby="basic-addon1">
+            <button class="input-group-text w-25" id="basic-addon1" @click="searchContent" >Cerca</button>
+        </div>
+    </div>
 </template>
 
 <style scoped lang="scss">
