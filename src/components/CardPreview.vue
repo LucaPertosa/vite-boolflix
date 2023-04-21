@@ -20,52 +20,34 @@ export default {
     methods: {
         onClick() {
             this.$emit('click', this.result);
+        },
+        getStars() {
+            return parseInt(this.result.vote_average / 2)
         }
     }
 };
 </script>
 
 <template>
-    <!-- Card Movies -->
-    <div v-if="this.typo.isMovie" @click="onClick" class="ms_prevCont">
-            <div class="img_container">
-                <img v-if="result.poster_path" :src="store.imgPath + result.poster_path" class="" alt="...">
-                <img v-else class="card-prev-img notF" src="../assets/notF.png">
-            </div>
+    <div @click="onClick" class="ms_prevCont">
+        <div class="img_container">
+            <img v-if="result.poster_path" :src="store.imgPath + result.poster_path" class="" alt="...">
+            <img v-else class="card-prev-img notF" src="../assets/notF.png">
+        </div>
         <div class="text_area">
-            <h2 class="ms_title">{{ result.title }}</h2>
-            <h5>Original title: "{{ result.original_title }}"</h5>
+            <h2 class="ms_title">{{ result.title ? result.title : result.name  }}</h2>
+            <h5>Original title: "{{ result.original_title ? result.original_title : result.original_name }}"</h5>
             <h5>
                 Original language: 
                 <lang-flag :iso="result.original_language" :squared="false"/> 
             </h5>
             <p><b>Trama:</b> "{{ result.overview }}"</p>
             <span>
-                voto: {{ result.vote_average }}
+                Voto medio: <i v-for="number in getStars()" class="fa-solid fa-star"></i>
+                    <i v-for="star in (5 - getStars())" class="fa-regular fa-star"></i>
             </span>
         </div>
     </div>
-    <!-- /Card Movies -->
-    <!-- Card Serie TV -->
-    <div v-if="this.typo.isTv" @click="onClick" class="ms_prevCont">
-            <div class="img_container">
-                <img v-if="result.poster_path" :src="store.imgPath + result.poster_path" class="" alt="...">
-                <img v-else class="card-prev-img notF" src="../assets/notF.png">
-            </div>
-        <div class="text_area">
-            <h2 class="ms_title">{{ result.name }}</h2>
-            <h5>Original title: "{{ result.original_name }}"</h5>
-            <h5>
-                Original language: 
-                <lang-flag :iso="result.original_language" :squared="false"/> 
-            </h5>
-            <p><b>Trama:</b> "{{ result.overview }}"</p>
-            <span>
-                voto: {{ result.vote_average }}
-            </span>
-        </div>
-    </div>
-    <!-- /Card Serie TV -->
 </template>
 
 <style lang="scss">
@@ -73,6 +55,7 @@ export default {
 .ms_prevCont {
     height: 100%;
     width: 100%;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     .img_container {
@@ -81,7 +64,7 @@ export default {
         img {
             height: 100%;
             width: 100%;
-            object-fit: cover;
+            object-fit: fit;
         }
     }
     .text_area {

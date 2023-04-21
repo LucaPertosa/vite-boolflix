@@ -36,10 +36,10 @@ export default {
         <div class="ms_container">
             <div class="logo">
                 <h1>BOOLFLIX</h1>
-                <ul class="nav">
+                <!-- <ul class="nav">
                     <button class="mx-3" :class="{'actives' : typo.isMovie, '' : typo.isTv}" @click="pickTypo('film')">Film</button>
                     <button class="mx-3" :class="{'actives' : typo.isTv, '' : typo.isMovie}" @click="pickTypo('tv')">Serie Tv</button>
-                </ul>
+                </ul> -->
             </div>
             <AppSearch @search="$emit('search')"/>
         </div>
